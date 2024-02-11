@@ -22,39 +22,44 @@ namespace OmniPainter.Common.UI.OmniBrushMenu
             menuPanel.Height.Set(630f, 0f);
             Append(menuPanel);
 
-            PaintingModeBtn modeTilesBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1071"), Language.GetTextValue("Mods.OmniPainter.Strings.Modes.Tiles"), CircularButtonVariant.Blue, BrushMode.Tiles);
-            modeTilesBtn.Width.Set(30f, 0f);
-            modeTilesBtn.Height.Set(30f, 0f);
-            modeTilesBtn.HAlign = 0.45f;
-            modeTilesBtn.VAlign = 0.42f;
-            menuPanel.Append(modeTilesBtn);
+            // Tools
 
-            PaintingModeBtn modeTilesClearBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1071"), Language.GetTextValue("Mods.OmniPainter.Strings.Modes.TilesClear"), CircularButtonVariant.Red, BrushMode.TilesClear);
-            modeTilesClearBtn.Width.Set(30f, 0f);
-            modeTilesClearBtn.Height.Set(30f, 0f);
-            modeTilesClearBtn.HAlign = 0.425f;
-            modeTilesClearBtn.VAlign = 0.475f;
-            menuPanel.Append(modeTilesClearBtn);
+            PaintingToolBtn toolTilesBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1071"), Language.GetTextValue("Mods.OmniPainter.Strings.Tools.Tiles"), CircularButtonVariant.Blue, BrushTool.Tiles);
+            toolTilesBtn.Width.Set(30f, 0f);
+            toolTilesBtn.Height.Set(30f, 0f);
+            toolTilesBtn.HAlign = 0.45f;
+            toolTilesBtn.VAlign = 0.42f;
+            toolTilesBtn.SetSelected(true);
+            menuPanel.Append(toolTilesBtn);
 
-            PaintingModeBtn modeWallsBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1072"), Language.GetTextValue("Mods.OmniPainter.Strings.Modes.Walls"), CircularButtonVariant.Blue, BrushMode.Walls);
-            modeWallsBtn.Width.Set(30f, 0f);
-            modeWallsBtn.Height.Set(30f, 0f);
-            modeWallsBtn.HAlign = 0.55f;
-            modeWallsBtn.VAlign = 0.42f;
-            menuPanel.Append(modeWallsBtn);
+            PaintingToolBtn toolTilesClearBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1071"), Language.GetTextValue("Mods.OmniPainter.Strings.Tools.TilesClear"), CircularButtonVariant.Red, BrushTool.TilesClear);
+            toolTilesClearBtn.Width.Set(30f, 0f);
+            toolTilesClearBtn.Height.Set(30f, 0f);
+            toolTilesClearBtn.HAlign = 0.425f;
+            toolTilesClearBtn.VAlign = 0.475f;
+            menuPanel.Append(toolTilesClearBtn);
 
-            PaintingModeBtn modeWallsClearBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1072"), Language.GetTextValue("Mods.OmniPainter.Strings.Modes.WallsClear"), CircularButtonVariant.Red, BrushMode.WallsClear);
-            modeWallsClearBtn.Width.Set(30f, 0f);
-            modeWallsClearBtn.Height.Set(30f, 0f);
-            modeWallsClearBtn.HAlign = 0.575f;
-            modeWallsClearBtn.VAlign = 0.475f;
-            menuPanel.Append(modeWallsClearBtn);
+            PaintingToolBtn toolWallsBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1072"), Language.GetTextValue("Mods.OmniPainter.Strings.Tools.Walls"), CircularButtonVariant.Blue, BrushTool.Walls);
+            toolWallsBtn.Width.Set(30f, 0f);
+            toolWallsBtn.Height.Set(30f, 0f);
+            toolWallsBtn.HAlign = 0.55f;
+            toolWallsBtn.VAlign = 0.42f;
+            menuPanel.Append(toolWallsBtn);
+
+            PaintingToolBtn toolWallsClearBtn = new(ModContent.Request<Texture2D>("Terraria/Images/Item_1072"), Language.GetTextValue("Mods.OmniPainter.Strings.Tools.WallsClear"), CircularButtonVariant.Red, BrushTool.WallsClear);
+            toolWallsClearBtn.Width.Set(30f, 0f);
+            toolWallsClearBtn.Height.Set(30f, 0f);
+            toolWallsClearBtn.HAlign = 0.575f;
+            toolWallsClearBtn.VAlign = 0.475f;
+            menuPanel.Append(toolWallsClearBtn);
 
             // Paints
+
             float hAlign = 0.085f;
             float vAlignTop = 0.55f;
             float vAlignBottom = 0.605f;
             bool isTopRow = true;
+            bool isSelectionsSet = false;
 
             foreach (PaintBucket paint in GetBucketsList())
             {
@@ -64,12 +69,46 @@ namespace OmniPainter.Common.UI.OmniBrushMenu
                 paintBtn.Height.Set(30f, 0f);
                 paintBtn.HAlign = hAlign;
                 paintBtn.VAlign = isTopRow ? vAlignTop : vAlignBottom;
+                if(!isSelectionsSet)
+                {
+                    paintBtn.SetSelected(true);
+                    isSelectionsSet = true;
+                }
                 menuPanel.Append(paintBtn);
-                if(!isTopRow)
+                if (!isTopRow)
                 {
                     hAlign += 0.055f;
                 }
                 isTopRow = !isTopRow;
+            }
+
+            // Modes
+
+            ModeButton modeAllBtn = new(ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Mode_All"), Language.GetTextValue("Mods.OmniPainter.Strings.Modes.All"), CircularButtonVariant.Blue, Mode.All);
+            modeAllBtn.Width.Set(30f, 0f);
+            modeAllBtn.Height.Set(30f, 0f);
+            modeAllBtn.HAlign = 0.675f;
+            modeAllBtn.VAlign = 0.475f;
+            modeAllBtn.SetSelected(true);
+            menuPanel.Append(modeAllBtn);
+
+            ModeButton modeOnlyUnpaintedBtn = new(ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Mode_Unpainted"), Language.GetTextValue("Mods.OmniPainter.Strings.Modes.UnpaintedTiles"), CircularButtonVariant.Blue, Mode.OnlyUnpainted);
+            modeOnlyUnpaintedBtn.Width.Set(30f, 0f);
+            modeOnlyUnpaintedBtn.Height.Set(30f, 0f);
+            modeOnlyUnpaintedBtn.HAlign = 0.730f;
+            modeOnlyUnpaintedBtn.VAlign = 0.475f;
+            menuPanel.Append(modeOnlyUnpaintedBtn);
+
+        }
+
+        public void DeselectAllToolButtons<T>()
+        {
+            foreach (CircularButton btn in menuPanel.Children)
+            {
+                if (btn is T)
+                {
+                    btn.SetSelected(false);
+                }
             }
         }
 

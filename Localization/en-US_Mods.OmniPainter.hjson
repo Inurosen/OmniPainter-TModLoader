@@ -1,15 +1,25 @@
 Items: {
 	OmniBrush: {
 		DisplayName: Omni Brush
-		Tooltip: Used to paint block and walls with ease.
+		Tooltip:
+			'''
+			Used to paint block and walls with ease
+
+			Right-click while holding it for options
+			'''
 	}
 }
 
 Strings: {
-	Modes: {
+	Tools: {
 		Tiles: Paint and coat tiles
 		TilesClear: Clear tiles
 		Walls: Paint and coat walls
 		WallsClear: Clear walls
+	}
+
+	Modes: {
+		All: Paint over painted tiles
+		UnpaintedTiles: Paint over unpainted tiles only
 	}
 }
