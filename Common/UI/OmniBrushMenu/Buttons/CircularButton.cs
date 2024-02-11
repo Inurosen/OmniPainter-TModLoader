@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using OmniPainter.Common.Systems;
 using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -13,11 +12,15 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
     internal class CircularButton : UIImageButton
     {
         internal string _hoverText;
+        internal bool _selected = false;
         private Asset<Texture2D> _texture;
-        private readonly Texture2D _btnBg = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_0");
-        private readonly Texture2D _btnBgHover = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_1");
-        private readonly Texture2D _btnBgAlt = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_8");
-        private readonly Texture2D _btnBgHoverAlt = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_9");
+        private readonly Texture2D _btnBg = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_0", AssetRequestMode.ImmediateLoad);
+        private readonly Texture2D _btnBgHover = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_1", AssetRequestMode.ImmediateLoad);
+        private readonly Texture2D _btnBgAlt = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_8", AssetRequestMode.ImmediateLoad);
+        private readonly Texture2D _btnBgHoverAlt = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_9", AssetRequestMode.ImmediateLoad);
+        private readonly Texture2D _btnBgSelected = (Texture2D)ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Wires_1_Green", AssetRequestMode.ImmediateLoad);
+        private readonly Texture2D _btnBgSelectedAlt = (Texture2D)ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Wires_9_Green", AssetRequestMode.ImmediateLoad);
+
 
         private readonly CircularButtonVariant _variant = CircularButtonVariant.Blue;
 
@@ -56,7 +59,13 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
 
         public override void LeftClick(UIMouseEvent evt)
         {
+            SetSelected(true);
             OmniBrushMenuSystem.GetInstance().Hide();
+        }
+
+        internal void SetSelected(bool selected)
+        {
+            _selected = selected;
         }
 
         private void DrawBlue(SpriteBatch spriteBatch, CalculatedStyle dimensions)
@@ -67,7 +76,14 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
             }
             else
             {
-                spriteBatch.Draw(_btnBg, dimensions.ToRectangle(), Color.White);
+                if (!_selected)
+                {
+                    spriteBatch.Draw(_btnBg, dimensions.ToRectangle(), Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(_btnBgSelected, dimensions.ToRectangle(), Color.White);
+                }
             }
         }
 
@@ -79,7 +95,14 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
             }
             else
             {
-                spriteBatch.Draw(_btnBgAlt, dimensions.ToRectangle(), Color.White);
+                if (!_selected)
+                {
+                    spriteBatch.Draw(_btnBgAlt, dimensions.ToRectangle(), Color.White);
+                }
+                else
+                {
+                    spriteBatch.Draw(_btnBgSelectedAlt, dimensions.ToRectangle(), Color.White);
+                }
             }
         }
     }

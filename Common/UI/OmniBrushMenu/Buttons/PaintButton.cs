@@ -17,6 +17,7 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
         public override void LeftClick(UIMouseEvent evt)
         {
             WorldPaintingSystem.GetInstance().SelectPaintBucket(_paint);
+            OmniBrushMenuSystem.GetInstance().OmniBrushMenuState.DeselectAllToolButtons<PaintButton>();
             base.LeftClick(evt);
         }
     }

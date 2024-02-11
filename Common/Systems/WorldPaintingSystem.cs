@@ -14,8 +14,9 @@ namespace OmniPainter.Common.Systems
         private Point fromTile;
 
 
-        private BrushMode CurrentMode = BrushMode.Tiles;
+        private BrushTool CurrentTool = BrushTool.Tiles;
         private PaintBucket CurrentPaintBucket = PaintBucket.Brown;
+        private Mode CurrentMode = Mode.All;
 
         public void UseBrush()
         {
@@ -70,10 +71,15 @@ namespace OmniPainter.Common.Systems
                 for (int y = from.Y; y != to.Y + yFactor; y += yFactor)
                 {
                     Item paint = ContentSamples.ItemsByType[((int)CurrentPaintBucket)];
-                    switch (CurrentMode)
+                    Tile tile = Main.tile[x, y];
+                    switch (CurrentTool)
                     {
-                        case BrushMode.Tiles:
-                            if(isCoating(CurrentPaintBucket))
+                        case BrushTool.Tiles:
+                            if (CurrentMode == Mode.OnlyUnpainted && !isBlockUnpainted(tile))
+                            {
+                                break;
+                            }
+                            if (isCoating(CurrentPaintBucket))
                             {
                                 WorldGen.paintCoatTile(x, y, paint.paintCoating, true);
                             }
@@ -82,11 +88,15 @@ namespace OmniPainter.Common.Systems
                                 WorldGen.paintTile(x, y, paint.paint, true);
                             }
                             break;
-                        case BrushMode.TilesClear:
+                        case BrushTool.TilesClear:
                             WorldGen.paintTile(x, y, 0, broadCast: true);
                             WorldGen.paintCoatTile(x, y, 0, true);
                             break;
-                        case BrushMode.Walls:
+                        case BrushTool.Walls:
+                            if (CurrentMode == Mode.OnlyUnpainted && !isWallUnpainted(tile))
+                            {
+                                break;
+                            }
                             if (isCoating(CurrentPaintBucket))
                             {
                                 WorldGen.paintCoatWall(x, y, paint.paintCoating, true);
@@ -96,7 +106,7 @@ namespace OmniPainter.Common.Systems
                                 WorldGen.paintWall(x, y, paint.paint, true);
                             }
                             break;
-                        case BrushMode.WallsClear:
+                        case BrushTool.WallsClear:
                             WorldGen.paintWall(x, y, 0, broadCast: true);
                             WorldGen.paintCoatWall(x, y, 0, true);
                             break;
@@ -105,10 +115,10 @@ namespace OmniPainter.Common.Systems
             }
         }
 
-        public void SelectMode(BrushMode mode)
+        public void SelectTool(BrushTool tool)
         {
-            CurrentMode = mode;
-            //Main.NewText($"Setting mode to: {Language.GetTextValue($"Mods.OmniPainter.Strings.Modes.{mode}")}");
+            CurrentTool = tool;
+            //Main.NewText($"Setting tool to: {Language.GetTextValue($"Mods.OmniPainter.Strings.Tools.{tool}")}");
 
         }
 
@@ -117,10 +127,15 @@ namespace OmniPainter.Common.Systems
             CurrentPaintBucket = paintBucket;
         }
 
-
-        public void SelectNextMode()
+        public void SelectMode(Mode mode)
         {
-            SelectMode(CurrentMode.NextEnum());
+            CurrentMode = mode;
+        }
+
+
+        public void SelectNextTool()
+        {
+            SelectTool(CurrentTool.NextEnum());
         }
 
         public bool IsSettingPoints()
@@ -128,9 +143,9 @@ namespace OmniPainter.Common.Systems
             return isSettingPoints;
         }
 
-        public BrushMode GetMode()
+        public BrushTool GetCurrentTool()
         {
-            return CurrentMode;
+            return CurrentTool;
         }
 
         public Vector2 GetScreenPositionStart()
@@ -175,20 +190,38 @@ namespace OmniPainter.Common.Systems
         {
             return ModContent.GetInstance<WorldPaintingSystem>();
         }
-        
+
         private bool isCoating(PaintBucket bucket)
         {
             return bucket == PaintBucket.Echo || bucket == PaintBucket.Illuminant;
         }
 
+        private bool isBlockUnpainted(Tile tile)
+        {
+            TileColorCache colorCache = tile.BlockColorAndCoating();
+            return colorCache.Color == 0 && !colorCache.Invisible && !colorCache.FullBright;
+        }
+
+        private bool isWallUnpainted(Tile tile)
+        {
+            TileColorCache colorCache = tile.WallColorAndCoating();
+            return colorCache.Color == 0 && !colorCache.Invisible && !colorCache.FullBright;
+        }
+
     }
 
-    public enum BrushMode : int
+    public enum BrushTool : int
     {
         Tiles = 0,
         Walls = 1,
         TilesClear = 2,
         WallsClear = 3
+    }
+
+    public enum Mode : int
+    {
+        All = 0,
+        OnlyUnpainted = 1
     }
 
     public enum PaintBucket : int

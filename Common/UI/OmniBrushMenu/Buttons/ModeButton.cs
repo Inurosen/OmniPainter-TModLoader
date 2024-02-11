@@ -5,11 +5,11 @@ using Terraria.UI;
 
 namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
 {
-    internal class PaintingModeBtn : CircularButton
+    internal class ModeButton : CircularButton
     {
-        private readonly BrushMode _mode;
+        private readonly Mode _mode;
 
-        public PaintingModeBtn(Asset<Texture2D> texture, string hoverText, CircularButtonVariant variant, BrushMode mode) : base(texture, hoverText, variant)
+        public ModeButton(Asset<Texture2D> texture, string hoverText, CircularButtonVariant variant, Mode mode) : base(texture, hoverText, variant)
         {
             _mode = mode;
         }
@@ -17,6 +17,7 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
         public override void LeftClick(UIMouseEvent evt)
         {
             WorldPaintingSystem.GetInstance().SelectMode(_mode);
+            OmniBrushMenuSystem.GetInstance().OmniBrushMenuState.DeselectAllToolButtons<ModeButton>();
             base.LeftClick(evt);
         }
     }
