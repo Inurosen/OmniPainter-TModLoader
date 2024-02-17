@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace OmniPainter.Common.Systems
@@ -12,6 +12,7 @@ namespace OmniPainter.Common.Systems
         private bool isSettingPoints;
         private Point startTile;
         private Point fromTile;
+        private List<UndoTileInfo> undoBuffer = new List<UndoTileInfo>();
 
 
         private BrushTool CurrentTool = BrushTool.Tiles;
@@ -54,6 +55,7 @@ namespace OmniPainter.Common.Systems
         }
         private void Paint(Point from, Point to)
         {
+            undoBuffer.Clear();
             int xFactor = 1;
             int yFactor = 1;
             if (from.X > to.X)
@@ -72,6 +74,17 @@ namespace OmniPainter.Common.Systems
                 {
                     Item paint = ContentSamples.ItemsByType[((int)CurrentPaintBucket)];
                     Tile tile = Main.tile[x, y];
+                    undoBuffer.Add(new UndoTileInfo
+                    {
+                        X = x,
+                        Y = y,
+                        TileColor = tile.TileColor,
+                        WallColor = tile.WallColor,
+                        TileFullBright = tile.IsTileFullbright,
+                        TileInvisible = tile.IsTileInvisible,
+                        WallFullBright = tile.IsWallFullbright,
+                        WallInvisible = tile.IsWallInvisible,
+                    });
                     switch (CurrentTool)
                     {
                         case BrushTool.Tiles:
@@ -113,6 +126,51 @@ namespace OmniPainter.Common.Systems
                     }
                 }
             }
+        }
+
+        public void Undo()
+        {
+            foreach (UndoTileInfo undoTileInfo in undoBuffer)
+            {
+                int x = undoTileInfo.X;
+                int y = undoTileInfo.Y;
+
+                WorldGen.paintTile(x, y, undoTileInfo.TileColor, true);
+                WorldGen.paintWall(x, y, undoTileInfo.WallColor, true);
+                if (undoTileInfo.TileFullBright)
+                {
+                    WorldGen.paintCoatTile(x, y, PaintCoatingID.Glow, true);
+                }
+                else if (undoTileInfo.TileInvisible)
+                {
+                    WorldGen.paintCoatTile(x, y, PaintCoatingID.Echo, true);
+                }
+                else
+                {
+                    WorldGen.paintCoatTile(x, y, PaintCoatingID.None, true);
+                }
+
+                if (undoTileInfo.WallFullBright)
+                {
+                    WorldGen.paintCoatWall(x, y, PaintCoatingID.Glow, true);
+                }
+                else if (undoTileInfo.WallInvisible)
+                {
+                    WorldGen.paintCoatWall(x, y, PaintCoatingID.Echo, true);
+                }
+                else
+                {
+                    WorldGen.paintCoatWall(x, y, PaintCoatingID.None, true);
+                }
+
+            }
+
+            undoBuffer.Clear();
+        }
+
+        public bool CanUndo()
+        {
+            return undoBuffer.Count > 0;
         }
 
         public void SelectTool(BrushTool tool)
@@ -258,6 +316,19 @@ namespace OmniPainter.Common.Systems
         Negative = ItemID.NegativePaint,
 
         Echo = ItemID.EchoCoating,
-        Illuminant = 4668 // No ItemID for some reason
+        Illuminant = ItemID.GlowPaint
+    }
+
+    struct UndoTileInfo
+    {
+        public int X;
+        public int Y;
+        public byte TileColor;
+        public byte WallColor;
+        public bool TileInvisible;
+        public bool TileFullBright;
+        public bool WallInvisible;
+        public bool WallFullBright;
+
     }
 }

@@ -13,6 +13,7 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
     {
         internal string _hoverText;
         internal bool _selected = false;
+        internal bool _disabled = false;
         private Asset<Texture2D> _texture;
         private readonly Texture2D _btnBg = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_0", AssetRequestMode.ImmediateLoad);
         private readonly Texture2D _btnBgHover = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_1", AssetRequestMode.ImmediateLoad);
@@ -20,6 +21,7 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
         private readonly Texture2D _btnBgHoverAlt = (Texture2D)ModContent.Request<Texture2D>("Terraria/Images/UI/Wires_9", AssetRequestMode.ImmediateLoad);
         private readonly Texture2D _btnBgSelected = (Texture2D)ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Wires_1_Green", AssetRequestMode.ImmediateLoad);
         private readonly Texture2D _btnBgSelectedAlt = (Texture2D)ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Wires_9_Green", AssetRequestMode.ImmediateLoad);
+        private readonly Texture2D _btnBgDisabled = (Texture2D)ModContent.Request<Texture2D>("OmniPainter/Common/UI/OmniBrushMenu/Buttons/Wires_0_Inactive", AssetRequestMode.ImmediateLoad);
 
 
         private readonly CircularButtonVariant _variant = CircularButtonVariant.Blue;
@@ -59,8 +61,11 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
 
         public override void LeftClick(UIMouseEvent evt)
         {
-            SetSelected(true);
-            OmniBrushMenuSystem.GetInstance().Hide();
+            if(!_disabled)
+            {
+                SetSelected(true);
+                OmniBrushMenuSystem.GetInstance().Hide();
+            }
         }
 
         internal void SetSelected(bool selected)
@@ -68,8 +73,19 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
             _selected = selected;
         }
 
+        internal void SetDisabled(bool disabled)
+        {
+            _disabled = disabled;
+        }
+
         private void DrawBlue(SpriteBatch spriteBatch, CalculatedStyle dimensions)
         {
+            if (_disabled)
+            {
+                spriteBatch.Draw(_btnBgDisabled, dimensions.ToRectangle(), Color.White);
+                return;
+            }
+
             if (IsMouseHovering)
             {
                 spriteBatch.Draw(_btnBgHover, dimensions.ToRectangle(), Color.White);
@@ -89,6 +105,12 @@ namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
 
         private void DrawRed(SpriteBatch spriteBatch, CalculatedStyle dimensions)
         {
+            if (_disabled)
+            {
+                spriteBatch.Draw(_btnBgDisabled, dimensions.ToRectangle(), Color.White);
+                return;
+            }
+
             if (IsMouseHovering)
             {
                 spriteBatch.Draw(_btnBgHoverAlt, dimensions.ToRectangle(), Color.White);

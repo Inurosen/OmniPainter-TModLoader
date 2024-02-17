@@ -99,6 +99,15 @@ namespace OmniPainter.Common.UI.OmniBrushMenu
             modeOnlyUnpaintedBtn.VAlign = 0.475f;
             menuPanel.Append(modeOnlyUnpaintedBtn);
 
+            // Undo
+
+            UndoButton undoBtn = new(ModContent.Request<Texture2D>("Terraria/Images/UI/VK_Backspace"), Language.GetTextValue("Mods.OmniPainter.Strings.Undo"), CircularButtonVariant.Blue);
+            undoBtn.Width.Set(30f, 0f);
+            undoBtn.Height.Set(30f, 0f);
+            undoBtn.HAlign = 0.325f;
+            undoBtn.VAlign = 0.475f;
+            menuPanel.Append(undoBtn);
+
         }
 
         public void DeselectAllToolButtons<T>()

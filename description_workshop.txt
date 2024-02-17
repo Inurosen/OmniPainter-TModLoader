@@ -1,0 +1,21 @@
+Allows to paint your world using Omni Brush by area selection. Doesn't require any paints.
+
+Craft Omni Brush on Tinkerer's Workshop with Paintbrush, Paint Roller and Paint Scraper.
+
+[h1] Available features [/h1]
+[list]
+[*]Select any paint or coating. Doesn't require paints in your inventory.
+
+[*][b]Tool:[/b] Paint tiles. Paint or apply coating on blocks and furniture in selected area.
+[*][b]Tool:[/b] Clear Tiles. Clear paint or coating on blocks and furniture in selected area
+[*][b]Tool:[/b] Paint walls. Paint apply coating on walls in selected area.
+[*][b]Tool:[/b] Clear walls. Clear paint or coating on walls in selected area.
+
+[*][b]Mode:[/b] Paint over painted tiles.
+[*][b]Mode:[/b] Paint over unpainted tiles only.
+
+[*][b]Undo:[/b] Undo last action.
+[/list]
+
+
+[h3] Report issues on [url=https://github.com/Inurosen/OmniPainter-TModLoader] GitHub [/url][/h3]
