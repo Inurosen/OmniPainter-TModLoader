@@ -22,4 +22,6 @@ Strings: {
 		All: Paint over painted tiles
 		UnpaintedTiles: Paint over unpainted tiles only
 	}
+
+	Undo: Undo last action
 }
