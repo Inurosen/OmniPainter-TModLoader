@@ -2,10 +2,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using OmniPainter.Common.Systems;
 using Terraria;
+using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace OmniPainter.Common.UI.TileSelectionRectangleOverlay
 {
+    [Autoload(Side = ModSide.Client)]
     public class TileSelectionRectangleOverlay : UIElement
     {
         Color color = new(60, 60, 60);

@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using OmniPainter.Common.Systems;
 using ReLogic.Content;
+using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
 {
+    [Autoload(Side = ModSide.Client)]
     internal class PaintButton : CircularButton
     {
         private readonly PaintBucket _paint;
