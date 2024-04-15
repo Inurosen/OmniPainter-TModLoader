@@ -9,6 +9,7 @@ using Terraria.UI;
 
 namespace OmniPainter.Common.UI.OmniBrushMenu
 {
+    [Autoload(Side = ModSide.Client)]
     public class OmniBrushMenuState : UIState
     {
         public OmniBrushMenuPanel menuPanel;

@@ -9,6 +9,7 @@ using Terraria.UI;
 
 namespace OmniPainter.Common.UI.OmniBrushMenu.Buttons
 {
+    [Autoload(Side = ModSide.Client)]
     internal class CircularButton : UIImageButton
     {
         internal string _hoverText;

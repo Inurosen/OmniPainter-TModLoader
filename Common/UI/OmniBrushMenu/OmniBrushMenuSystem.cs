@@ -6,6 +6,7 @@ using Terraria.UI;
 
 namespace OmniPainter.Common.UI.OmniBrushMenu
 {
+    [Autoload(Side = ModSide.Client)]
     public class OmniBrushMenuSystem : ModSystem
     {
         public UserInterface OmniBrushMenuUI;

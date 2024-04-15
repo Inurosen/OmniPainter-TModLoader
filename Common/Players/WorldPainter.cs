@@ -8,6 +8,7 @@ using OmniPainter.Common.UI.OmniBrushMenu;
 
 namespace OmniPainter.Common.Players
 {
+    [Autoload(Side = ModSide.Client)]
     public class WorldPainter : ModPlayer
     {
         private bool isMouseRightHandled = false;

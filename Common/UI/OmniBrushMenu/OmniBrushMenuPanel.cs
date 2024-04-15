@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ModLoader;
 
 namespace OmniPainter.Common.UI.OmniBrushMenu
 {
+    [Autoload(Side = ModSide.Client)]
     public class OmniBrushMenuPanel : UIPanel
     {
         private bool isActive;
