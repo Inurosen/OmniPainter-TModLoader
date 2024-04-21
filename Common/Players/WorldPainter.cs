@@ -20,7 +20,7 @@ namespace OmniPainter.Common.Players
 
         public override void PostUpdate()
         {
-            if (Player.inventory[Player.selectedItem].ModItem is not OmniBrush)
+            if (Player.whoAmI == Main.myPlayer && Player.inventory[Player.selectedItem].ModItem is not OmniBrush)
             {
                 WorldPaintingSystem.GetInstance().ResetPainting();
             }
@@ -28,23 +28,32 @@ namespace OmniPainter.Common.Players
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
+            HandleRightClickMenu();
+            HandleEscape();
+        }
+
+        private void HandleRightClickMenu()
+        {
             if (Main.mouseRight && Player.inventory[Player.selectedItem].ModItem is OmniBrush && !isMouseRightHandled)
             {
                 isMouseRightHandled = true;
                 OmniBrushMenuSystem.GetInstance().Toggle();
+                WorldPaintingSystem.GetInstance().ResetPainting();
             }
 
             if (!Main.mouseRight && isMouseRightHandled)
             {
                 isMouseRightHandled = false;
             }
+        }
 
-            if(Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+        private static void HandleEscape()
+        {
+            if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
             {
                 WorldPaintingSystem.GetInstance().ResetPainting();
                 OmniBrushMenuSystem.GetInstance().Hide();
             }
         }
-
     }
 }
