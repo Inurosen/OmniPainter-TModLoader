@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,6 +19,11 @@ namespace OmniPainter.Common.Systems
         private BrushTool CurrentTool = BrushTool.Tiles;
         private PaintBucket CurrentPaintBucket = PaintBucket.Brown;
         private Mode CurrentMode = Mode.All;
+
+        public override void ClearWorld()
+        {
+            ResetPainting();
+        }
 
         public void UseBrush()
         {
@@ -40,6 +46,7 @@ namespace OmniPainter.Common.Systems
 
         private void SetPoint(Point point)
         {
+            SoundEngine.PlaySound(SoundID.MenuTick);
             if (!isSettingPoints)
             {
                 isSettingPoints = true;
